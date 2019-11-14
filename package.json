@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "compile": "node compile.js"
+  },
+  "name": "password-generator",
+  "version": "1.0.0",
+  "author": "Leobastiani <leogbastiani@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "uglify-es": "^3.3.9"
+  }
+}
