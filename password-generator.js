@@ -8,10 +8,22 @@
     elem.remove();
   }
 
-  async function digestMessage(message) {
+  const paste = async () => {
+    return await navigator.clipboard.readText();
+  }
+
+  async function generatePassword(message) {
     const msgUint8 = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-    return btoa(new Uint8Array(hashBuffer));
+    const array = new Uint8Array(hashBuffer);
+
+    const lowLetters = 'abcdefghijklmnopqrstuvwxyz';
+    const uppLetters = lowLetters.toUpperCase();
+    const numbers = '0123456789';
+    const symbols = '!#$%&*+-=?@^_';
+    const chars = symbols + lowLetters + numbers + uppLetters;
+
+    return Array.from(array.slice(0, 16)).map(n => chars[n % chars.length]).join('');
   }
 
   let hostname = document.location.hostname;
@@ -19,10 +31,23 @@
   if(hostname.match(regex)) {
     hostname = hostname.match(regex)[0];
   }
-  const preffixedHostname = `${password}${hostname}`
 
-  password = '*1'+(await digestMessage(preffixedHostname)).substring(0, 14);
+  let email = '';
+  const form = Array.from(document.querySelectorAll('form')).filter(f => f.querySelector('input[type=password]'))[0];
+  const emailEl = form ? form.querySelector('input[type=email]') : null;
+  if(emailEl && emailEl.value != '') {
+    email = emailEl.value
+  }
+  else {
+    const clip = await paste();
+    if(clip.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      email = clip;
+    }
+  }
 
-  copy(password);
-  console.debug({ hostname, password })
+  const message = `${email}:${password}:${hostname}`;
+  const generatedPassword = await generatePassword(message);
+
+  copy(generatedPassword);
+  console.debug({ message, password: generatedPassword })
 })();
