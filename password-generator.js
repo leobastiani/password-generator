@@ -1,4 +1,4 @@
-(async (password = '') => {
+(async (password = '', account='') => {
   const copy = (text) => {
     const elem = document.createElement('textarea');
     document.body.append(elem);
@@ -32,20 +32,16 @@
     hostname = hostname.match(regex)[0];
   }
 
-  let email = '';
   const form = Array.from(document.querySelectorAll('form')).filter(f => f.querySelector('input[type=password]'))[0];
   const emailEl = form ? form.querySelector('input[type=email]') : null;
   if(emailEl && emailEl.value != '') {
-    email = emailEl.value
-  }
-  else {
-    const clip = await paste();
-    if(clip.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-      email = clip;
-    }
+    account = emailEl.value
   }
 
-  const message = `${email}:${password}:${hostname}`;
+  account = window.prompt('E-mail or account:', account);
+  hostname = window.prompt('Hostname:', hostname);
+
+  const message = `${account}:${password}:${hostname}`;
   const generatedPassword = await generatePassword(message);
 
   copy(generatedPassword);
