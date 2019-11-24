@@ -1,21 +1,6 @@
 (async (password = '', account='') => {
-  const copy = (text) => {
-    const elem = document.createElement('textarea');
-    document.body.append(elem);
-    elem.value = text;
-    elem.select();
-    document.execCommand("copy");
-    elem.remove();
-  }
-
-  const paste = async () => {
-    return await navigator.clipboard.readText();
-  }
-
   async function generatePassword(message) {
-    const msgUint8 = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-    const array = new Uint8Array(hashBuffer);
+    const array = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(message)));
 
     const lowLetters = 'abcdefghijklmnopqrstuvwxyz';
     const uppLetters = lowLetters.toUpperCase();
@@ -44,6 +29,6 @@
   const message = `${account}:${password}:${hostname}`;
   const generatedPassword = await generatePassword(message);
 
-  copy(generatedPassword);
+  navigator.clipboard.writeText(generatedPassword);
   console.debug({ message, password: generatedPassword })
 })();
