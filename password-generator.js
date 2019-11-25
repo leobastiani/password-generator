@@ -12,7 +12,7 @@
   }
 
   let hostname = document.location.hostname;
-  const regex = /\w+\.(com|net|br|org).*$/;
+  const regex = /\w+\.(com|net|org).*$/;
   if(hostname.match(regex)) {
     hostname = hostname.match(regex)[0];
   }
@@ -24,7 +24,9 @@
   }
 
   account = window.prompt('E-mail or account:', account);
+  if(!account) return;
   hostname = window.prompt('Hostname:', hostname);
+  if(!hostname) return;
 
   const message = `${account}:${password}:${hostname}`;
   const generatedPassword = await generatePassword(message);
