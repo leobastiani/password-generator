@@ -1,7 +1,7 @@
 {
   "scripts": {
     "compile": "node compile.js",
-    "watch": "nodemon --exec \"node compile.js\""
+    "watch": "nodemon ./compile.js"
   },
   "name": "password-generator",
   "version": "1.0.0",
