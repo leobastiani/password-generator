@@ -17,3 +17,11 @@ Change your personal password in `javascript:(async(password="my-personal-passwo
 ## Set your default account
 
 Change your default account in `javascript:(async(password="",account="my-default-account"`...
+
+## Force Google to store your password
+
+Use this form generator and fill it with your data:
+
+```javascript
+javascript:const form=document.createElement("form"),input1=document.createElement("input"),input2=document.createElement("input"),submit=document.createElement("input");form.append(input1),form.append(input2),form.append(submit),input2.type="password",submit.type="submit",form.method="post",document.body.append(form),input1.select();
+```
