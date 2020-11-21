@@ -62,26 +62,25 @@
     }
   };
 
-  const message = `${account}:${password}:${options.toString()}:${hostname}`;
-  let generatedPassword;
+  const defaultMessage = `${account}:${password}:${options.toString()}:${hostname}`;
   for(let tries=0; ; tries++) {
-    generatedPassword = await generatePassword(tries ? `message:${tries}` : message, options.size, options.toCollection());
-    const generatedPasswordArray = generatedPassword.split('');
-    if(options.lowerCase && !generatedPasswordArray.some(ch => LOWER_CASE.includes(ch))) {
+    const message = defaultMessage.concat(!tries ? '' : `:${tries}`);
+    const password = await generatePassword(message, options.size, options.toCollection());
+    const passwordAsArray = password.split('');
+    if(options.lowerCase && !passwordAsArray.some(ch => LOWER_CASE.includes(ch))) {
       continue;
     }
-    if(options.upperCase && !generatedPasswordArray.some(ch => UPPER_CASE.includes(ch))) {
+    if(options.upperCase && !passwordAsArray.some(ch => UPPER_CASE.includes(ch))) {
       continue;
     }
-    if(options.number && !generatedPasswordArray.some(ch => NUMBER.includes(ch))) {
+    if(options.number && !passwordAsArray.some(ch => NUMBER.includes(ch))) {
       continue;
     }
-    if(options.symbol && !generatedPasswordArray.some(ch => SYMBOL.includes(ch))) {
+    if(options.symbol && !passwordAsArray.some(ch => SYMBOL.includes(ch))) {
       continue;
     }
+    console.debug({ message, password });
+    navigator.clipboard.writeText(password);
     break;
   }
-
-  navigator.clipboard.writeText(generatedPassword);
-  console.debug({ message, password: generatedPassword })
 })();
