@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "author": "Leobastiani <leogbastiani@gmail.com>",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "clipboardy": "^2.1.0",
     "nodemon": "^1.19.4",
     "uglify-es": "^3.3.9"
