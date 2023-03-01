@@ -112,7 +112,15 @@
     if (location.host === "accounts.google.com") {
       document.querySelector("[name=password]").value = password;
     } else {
-      navigator.clipboard.writeText(password);
+      try {
+        await navigator.clipboard.writeText(password);
+      } catch (e) {
+        document.body.addEventListener(
+          "click",
+          () => navigator.clipboard.writeText(password),
+          { once: true }
+        );
+      }
     }
     break;
   }
